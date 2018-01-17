@@ -81,12 +81,18 @@ final class Mai_Engine_Installer {
 	 * Load the necessary files.
 	 * Setup the updater.
 	 *
-	 * @return void
+	 * @uses    https://github.com/YahnisElsts/plugin-update-checker/
+	 * @uses    https://github.com/afragen/wp-dependency-installer/
+	 *
+	 * @return  void
 	 */
 	function includes() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/wp-dependency-installer.php'; // v 1.3.2
 		require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-update-checker/plugin-update-checker.php'; // v 4.4
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-pro-engine' );
+		WP_Dependency_Installer::instance()->register( array( $this->config ) );
 	}
+
 
 	/**
 	 * Run the hooks and function.
@@ -94,33 +100,9 @@ final class Mai_Engine_Installer {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'plugins_loaded',    array( $this, 'update' ) );
-		add_action( 'after_setup_theme', array( $this, 'install' ) );
 		add_action( 'after_setup_theme', array( $this, 'write' ) );
 		add_action( 'admin_init',        array( $this, 'deactivate' ) );
 		add_action( 'admin_notices',     array( $this, 'admin_notices' ) );
-	}
-
-	/**
-	 * Setup the updater.
-	 *
-	 * @uses    https://github.com/YahnisElsts/plugin-update-checker/
-	 *
-	 * @return  void
-	 */
-	function update() {
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-pro-engine' );
-	}
-
-	/**
-	 * Force install of the correct plugin.
-	 *
-	 * @uses    https://github.com/afragen/wp-dependency-installer/
-	 *
-	 * @return  void
-	 */
-	function install() {
-		WP_Dependency_Installer::instance()->register( array( $this->config ) );
 	}
 
 	/**
