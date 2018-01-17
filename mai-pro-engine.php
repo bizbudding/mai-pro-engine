@@ -36,7 +36,7 @@ final class Mai_Engine_Installer {
 			'host'     => 'github',
 			'slug'     => 'mai-theme-engine/mai-theme-engine.php',
 			'uri'      => 'maithemewp/mai-theme-engine',
-			'branch'   => 'beta',
+			'branch'   => 'master',
 			'optional' => false,
 			'token'    => null,
 		);
@@ -50,9 +50,6 @@ final class Mai_Engine_Installer {
 	 *
 	 * @since   1.0.0
 	 * @static  var array $instance
-	 * @uses    Mai_Engine_Installer::setup_constants() Setup the constants needed.
-	 * @uses    Mai_Engine_Installer::includes() Include the required files.
-	 * @uses    Mai_Engine_Installer::setup() Activate, deactivate, etc.
 	 * @see     Mai_Engine_Installer()
 	 * @return  object | Mai_Engine_Installer The one true Mai_Engine_Installer
 	 */
@@ -159,6 +156,10 @@ final class Mai_Engine_Installer {
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 	}
 
+	/**
+	 * Check that the JSON file updated accordingly,
+	 * and deactivate the plugin.
+	 */
 	function deactivate() {
 
 		// Bail if file doesn't exist.
@@ -190,7 +191,16 @@ final class Mai_Engine_Installer {
 
 	}
 
+	/**
+	 * Show an admin notice with a link to refresh the page,
+	 * this should trigger the engine install, if it didn't trigger the first time
+	 * during installation of this plugin.
+	 */
 	function admin_notices() {
+		/**
+		 * Check if this plugin is active,
+		 * cause it was deactivating before showing notice and would show it on multiple refreshes.
+		 */
 		if ( ! is_plugin_active( plugin_basename( __FILE__ ) ) ) {
 			return;
 		}
