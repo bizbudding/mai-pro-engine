@@ -89,7 +89,7 @@ final class Mai_Engine_Installer {
 	function includes() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/wp-dependency-installer.php'; // v 1.3.2
 		require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-update-checker/plugin-update-checker.php'; // v 4.4
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-pro-engine/', __FILE__, 'mai-pro-engine' );
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maiprowp/mai-pro-engine/', __FILE__, 'mai-pro-engine' );
 		WP_Dependency_Installer::instance()->register( array( $this->config ) );
 		$this->engine_running = true;
 	}
