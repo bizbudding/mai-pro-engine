@@ -150,19 +150,24 @@ final class Mai_Engine_Installer {
 		// Decode the JSON data into a PHP array.
 		$decoded = json_decode( $contents, true );
 
-		// Loop through the dependencies.
-		foreach ( $decoded as $key => $value ) {
-
-			// Skip if not the one we want.
-			if ( ! isset( $value['uri'] ) || 'maiprowp/mai-pro-engine' !== $value['uri'] ) {
-				continue;
-			}
-
-			// Build the new engine location array.
-			$decoded[ $key ] = $this->config;
-
+		if ( empty( $decoded ) ) {
 			$update_file = true;
+			// Build the new engine location array.
+			$decoded[] = $this->config;
+		} else {
+			// Loop through the dependencies.
+			foreach ( (array) $decoded as $key => $value ) {
 
+				// Skip if not the ones we want.
+				if ( ! isset( $value['uri'] ) || ! in_array( $value['uri'], array( 'maiprowp/mai-pro-engine', 'bizbudding/mai-pro-engine' ) ) ) {
+					continue;
+				}
+
+				$update_file = true;
+
+				// Build the new engine location array.
+				$decoded[ $key ] = $this->config;
+			}
 		}
 
 		if ( ! $update_file ) {
@@ -170,7 +175,7 @@ final class Mai_Engine_Installer {
 		}
 
 		// Encode the array back into a JSON string.
-		$json = json_encode( $decoded );
+		$json = json_encode( $decoded, JSON_UNESCAPED_SLASHES );
 
 		// Save the file.
 		file_put_contents( $this->file, $json );
@@ -178,6 +183,11 @@ final class Mai_Engine_Installer {
 	}
 
 	function deactivate() {
+
+		// Bail if file doesn't exist.
+		if ( ! file_exists( $this->file ) ) {
+			return;
+		}
 
 		$file_correct = false;
 
@@ -188,13 +198,11 @@ final class Mai_Engine_Installer {
 		$decoded = json_decode( $contents, true );
 
 		// Loop through the dependencies.
-		foreach ( $decoded as $key => $value ) {
-
+		foreach ( (array) $decoded as $key => $value ) {
 			// If depency is set correctly, deactivate this plugin.
 			if ( isset( $value['uri'] ) && 'maithemewp/mai-theme-engine' === $value['uri'] ) {
 				$file_correct = true;
 			}
-
 		}
 
 		// Create array of plugins to deactivate, with this one being the only one for now.
@@ -204,8 +212,9 @@ final class Mai_Engine_Installer {
 		if ( is_plugin_active( 'mai-pro-engine/mai-pro-engine.php' ) ) {
 			$plugins_to_deactivate[] = 'mai-pro-engine/mai-pro-engine.php';
 		}
+
 		// Old engine is not active, new engine is active, and the theme file has been updated.
-		elseif ( class_exists( 'Mai_Theme_Engine' ) && $file_correct ) {
+		if ( class_exists( 'Mai_Theme_Engine' ) && $file_correct ) {
 			// Deactivate plugins.
 			deactivate_plugins( $plugins_to_deactivate );
 		}
@@ -213,7 +222,7 @@ final class Mai_Engine_Installer {
 	}
 
 	function admin_notices() {
-		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">Click Here</a>' );
+		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
 		if ( isset( $_GET['activate'] ) ) {
@@ -229,6 +238,9 @@ final class Mai_Engine_Installer {
  * @return object|Mai_Engine_Installer The one true Mai_Engine_Installer Instance.
  */
 function Mai_Engine_Installer() {
+	if ( ! is_admin() ) {
+		return;
+	}
 	return Mai_Engine_Installer::instance();
 }
 
