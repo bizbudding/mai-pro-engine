@@ -132,11 +132,6 @@ final class Mai_Engine_Installer {
 	 */
 	function write() {
 
-		// Bail if current user cannot manage plugins.
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return;
-		}
-
 		// Bail if file doesn't exist.
 		if ( ! file_exists( $this->file ) ) {
 			return;
@@ -200,23 +195,15 @@ final class Mai_Engine_Installer {
 		// Loop through the dependencies.
 		foreach ( (array) $decoded as $key => $value ) {
 			// If depency is set correctly, deactivate this plugin.
-			if ( isset( $value['uri'] ) && 'maithemewp/mai-theme-engine' === $value['uri'] ) {
+			if ( isset( $value['uri'] ) && 'maithemewp/mai-theme-engine' == $value['uri'] ) {
 				$file_correct = true;
 			}
-		}
-
-		// Create array of plugins to deactivate, with this one being the only one for now.
-		$plugins_to_deactivate = array( plugin_basename( __FILE__ ) );
-
-		// If the old engine is active, add it to array of plugins to deactivate.
-		if ( is_plugin_active( 'mai-pro-engine/mai-pro-engine.php' ) ) {
-			$plugins_to_deactivate[] = 'mai-pro-engine/mai-pro-engine.php';
 		}
 
 		// Old engine is not active, new engine is active, and the theme file has been updated.
 		if ( class_exists( 'Mai_Theme_Engine' ) && $file_correct ) {
 			// Deactivate plugins.
-			deactivate_plugins( $plugins_to_deactivate );
+			deactivate_plugins( 'mai-pro-engine/mai-pro-engine.php' );
 		}
 
 	}
