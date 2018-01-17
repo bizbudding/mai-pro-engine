@@ -177,24 +177,20 @@ final class Mai_Engine_Installer {
 		// Loop through the dependencies.
 		foreach ( (array) $decoded as $key => $value ) {
 			// If depency is set correctly, deactivate this plugin.
-			if ( isset( $value['uri'] ) && 'maithemewp/mai-theme-engine' == $value['uri'] ) {
+			if ( isset( $value['uri'] ) && ( 'maithemewp/mai-theme-engine' == $value['uri'] ) ) {
 				$file_correct = true;
 			}
 		}
 
 		// Old engine is not active, new engine is active, and the theme file has been updated.
-		if ( class_exists( 'Mai_Theme_Engine' ) && $file_correct ) {
-			// Deactivate plugins.
+		if ( $this->engine_running && $file_correct ) {
+			// Deactivate plugins. Best on 'admin_init'.
 			deactivate_plugins( 'mai-pro-engine/mai-pro-engine.php' );
 		}
 
 	}
 
 	function admin_notices() {
-		// Bail if the engine is running.
-		if ( $this->engine_running ) {
-			return;
-		}
 		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
