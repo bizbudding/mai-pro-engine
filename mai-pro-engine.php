@@ -24,11 +24,13 @@ final class Mai_Engine_Installer {
 	 */
 	private static $instance;
 
+	private $engine_running;
+	private $file;
 	private $config;
 
-	private $file;
-
 	function __construct() {
+		$this->engine_running = false;
+		$this->file = get_stylesheet_directory() . '/includes/dependencies/wp-dependencies.json';
 		$this->config = array(
 			'name'     => 'Mai Theme Engine',
 			'host'     => 'github',
@@ -38,7 +40,6 @@ final class Mai_Engine_Installer {
 			'optional' => false,
 			'token'    => null,
 		);
-		$this->file = get_stylesheet_directory() . '/includes/dependencies/wp-dependencies.json';
 	}
 
 	/**
@@ -92,6 +93,7 @@ final class Mai_Engine_Installer {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-update-checker/plugin-update-checker.php'; // v 4.4
 		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-pro-engine' );
 		WP_Dependency_Installer::instance()->register( array( $this->config ) );
+		$this->engine_running = true;
 	}
 
 	/**
@@ -190,7 +192,7 @@ final class Mai_Engine_Installer {
 
 	function admin_notices() {
 		// Bail if the engine is running.
-		if ( class_exists( 'Mai_Theme_Engine' ) ) {
+		if ( $this->engine_running ) {
 			return;
 		}
 		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
