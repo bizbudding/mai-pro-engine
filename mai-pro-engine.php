@@ -185,7 +185,7 @@ final class Mai_Engine_Installer {
 		// Old engine is not active, new engine is active, and the theme file has been updated.
 		if ( $this->engine_running && $file_correct ) {
 			// Deactivate plugins. Best on 'admin_init'.
-			deactivate_plugins( plugin_basename( __FILE__ ) )
+			deactivate_plugins( plugin_basename( __FILE__ ) );
 		}
 
 	}
