@@ -98,6 +98,7 @@ final class Mai_Engine_Installer {
 		add_action( 'after_setup_theme', array( $this, 'install' ) );
 		add_action( 'after_setup_theme', array( $this, 'write' ) );
 		add_action( 'admin_init',        array( $this, 'deactivate' ) );
+		add_action( 'admin_notices',     array( $this, 'admin_notices' ) );
 	}
 
 	/**
@@ -108,7 +109,7 @@ final class Mai_Engine_Installer {
 	 * @return  void
 	 */
 	function update() {
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-engine-installer' );
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-pro-engine' );
 	}
 
 	/**
@@ -209,6 +210,15 @@ final class Mai_Engine_Installer {
 			deactivate_plugins( $plugins_to_deactivate );
 		}
 
+	}
+
+	function admin_notices() {
+		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">Click Here</a>' );
+		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
+		// Remove "Plugin activated" notice.
+		if ( isset( $_GET['activate'] ) ) {
+			unset( $_GET['activate'] );
+		}
 	}
 
 }
