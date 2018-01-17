@@ -62,6 +62,7 @@ final class Mai_Engine_Installer {
 			// Methods
 			self::$instance->setup_constants();
 			self::$instance->includes();
+			self::$instance->write();
 			self::$instance->hooks();
 		}
 		return self::$instance;
@@ -91,18 +92,6 @@ final class Mai_Engine_Installer {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/plugin-update-checker/plugin-update-checker.php'; // v 4.4
 		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-engine-installer/', __FILE__, 'mai-pro-engine' );
 		WP_Dependency_Installer::instance()->register( array( $this->config ) );
-	}
-
-
-	/**
-	 * Run the hooks and function.
-	 *
-	 * @return void
-	 */
-	public function hooks() {
-		add_action( 'after_setup_theme', array( $this, 'write' ) );
-		add_action( 'admin_init',        array( $this, 'deactivate' ) );
-		add_action( 'admin_notices',     array( $this, 'admin_notices' ) );
 	}
 
 	/**
@@ -158,6 +147,16 @@ final class Mai_Engine_Installer {
 
 	}
 
+	/**
+	 * Run the hooks and function.
+	 *
+	 * @return void
+	 */
+	public function hooks() {
+		add_action( 'admin_init',    array( $this, 'deactivate' ) );
+		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+	}
+
 	function deactivate() {
 
 		// Bail if file doesn't exist.
@@ -190,6 +189,10 @@ final class Mai_Engine_Installer {
 	}
 
 	function admin_notices() {
+		// Bail if the engine is running.
+		if ( class_exists( 'Mai_Theme_Engine' ) ) {
+			return;
+		}
 		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
