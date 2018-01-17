@@ -185,12 +185,15 @@ final class Mai_Engine_Installer {
 		// Old engine is not active, new engine is active, and the theme file has been updated.
 		if ( $this->engine_running && $file_correct ) {
 			// Deactivate plugins. Best on 'admin_init'.
-			deactivate_plugins( 'mai-pro-engine/mai-pro-engine.php' );
+			deactivate_plugins( plugin_basename( __FILE__ ) )
 		}
 
 	}
 
 	function admin_notices() {
+		if ( ! is_plugin_active( plugin_basename( __FILE__ ) ) ) {
+			return;
+		}
 		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
