@@ -126,7 +126,6 @@ final class Mai_Engine_Installer {
 	/**
 	 * Force install of the correct Mai Theme Engine plugin.
 	 * Check the existing child theme json file and update as needed.
-	 * Deactivate this plugin if everything is in place.
 	 *
 	 * @return void
 	 */
