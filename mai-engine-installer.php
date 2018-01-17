@@ -34,7 +34,7 @@ final class Mai_Engine_Installer {
 			'host'     => 'github',
 			'slug'     => 'mai-theme-engine/mai-theme-engine.php',
 			'uri'      => 'maithemewp/mai-theme-engine',
-			'branch'   => 'master',
+			'branch'   => 'beta',
 			'optional' => false,
 			'token'    => null,
 		);
