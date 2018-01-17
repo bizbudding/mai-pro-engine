@@ -5,7 +5,7 @@
  * Plugin URI:      https://maitheme.com/
  * Description:     This plugin only exists when older versions of Mai Theme or Mai Pro point to the older engine repository. Once Mai Theme Engine is installed and activated, this plugin can safely be deactivated and deleted.
  *
- * Version:         2.0.0
+ * Version:         2.0.0-beta.1
  *
  * Author:          MaiTheme.com
  * Author URI:      https://maitheme.com
@@ -74,7 +74,7 @@ final class Mai_Engine_Installer {
 	 */
 	private function setup_constants() {
 		// A full version ahead of Mai Theme Engine so it always shows as an update.
-		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '2.0.0' );
+		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '2.0.0-beta.1' );
 	}
 
 	/**
