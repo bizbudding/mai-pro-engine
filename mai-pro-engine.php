@@ -60,7 +60,6 @@ final class Mai_Engine_Installer {
 			// Methods
 			self::$instance->setup_constants();
 			self::$instance->includes();
-			self::$instance->write();
 			self::$instance->hooks();
 		}
 		return self::$instance;
@@ -92,6 +91,17 @@ final class Mai_Engine_Installer {
 		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maiprowp/mai-pro-engine/', __FILE__, 'mai-pro-engine' );
 		WP_Dependency_Installer::instance()->register( array( $this->config ) );
 		$this->engine_running = true;
+	}
+
+	/**
+	 * Run the hooks and function.
+	 *
+	 * @return void
+	 */
+	public function hooks() {
+		add_action( 'plugins_loaded', array( $this, 'write' ) );
+		// add_action( 'admin_init',    array( $this, 'deactivate' ) );
+		add_action( 'admin_notices',  array( $this, 'admin_notices' ) );
 	}
 
 	/**
@@ -145,16 +155,6 @@ final class Mai_Engine_Installer {
 		// Save the file.
 		file_put_contents( $this->file, $json );
 
-	}
-
-	/**
-	 * Run the hooks and function.
-	 *
-	 * @return void
-	 */
-	public function hooks() {
-		// add_action( 'admin_init',    array( $this, 'deactivate' ) );
-		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 	}
 
 	/**
