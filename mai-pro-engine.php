@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:     Mai Theme Engine Installer
+ * Plugin Name:     Mai Pro Engine
  * Plugin URI:      https://maitheme.com/
  * Description:     This plugin only exists when older versions of Mai Theme or Mai Pro point to the older engine repository. Once Mai Theme Engine is installed and activated, this plugin can safely be deactivated and deleted.
  *
