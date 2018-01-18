@@ -158,16 +158,6 @@ final class Mai_Engine_Installer {
 	}
 
 	/**
-	 * Run the hooks and function.
-	 *
-	 * @return void
-	 */
-	public function hooks() {
-		// add_action( 'admin_init',    array( $this, 'deactivate' ) );
-		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
-	}
-
-	/**
 	 * Check that the JSON file updated accordingly,
 	 * and deactivate the plugin.
 	 */
