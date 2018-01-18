@@ -5,7 +5,7 @@
  * Plugin URI:      https://maitheme.com/
  * Description:     This plugin only exists when older versions of Mai Theme or Mai Pro point to the older engine repository. Once Mai Theme Engine is installed and activated, this plugin can safely be deactivated and deleted.
  *
- * Version:         1.9.0-beta.5
+ * Version:         2.0.0
  *
  * Author:          MaiTheme.com
  * Author URI:      https://maitheme.com
@@ -36,7 +36,7 @@ final class Mai_Engine_Installer {
 			'host'     => 'github',
 			'slug'     => 'mai-theme-engine/mai-theme-engine.php',
 			'uri'      => 'maithemewp/mai-theme-engine',
-			'branch'   => 'beta',
+			'branch'   => 'master',
 			'optional' => false,
 			'token'    => null,
 		);
@@ -72,8 +72,7 @@ final class Mai_Engine_Installer {
 	 * @return  void
 	 */
 	private function setup_constants() {
-		// A full version ahead of Mai Theme Engine so it always shows as an update.
-		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '1.9.0-beta.5' );
+		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '2.0.0' );
 	}
 
 	/**
@@ -205,7 +204,7 @@ final class Mai_Engine_Installer {
 		if ( ! is_plugin_active( plugin_basename( __FILE__ ) ) ) {
 			return;
 		}
-		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation. If Mai Theme Engine is activated, please deactivate and delete Mai Theme Engine Installer.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
+		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
 		if ( isset( $_GET['activate'] ) ) {
