@@ -197,14 +197,7 @@ final class Mai_Engine_Installer {
 	 * during installation of this plugin.
 	 */
 	function admin_notices() {
-		/**
-		 * Check if this plugin is active,
-		 * cause it was deactivating before showing notice and would show it on multiple refreshes.
-		 */
-		if ( ! is_plugin_active( plugin_basename( __FILE__ ) ) ) {
-			return;
-		}
-		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
+		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine migration.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
 		if ( isset( $_GET['activate'] ) ) {
