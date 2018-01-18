@@ -197,7 +197,10 @@ final class Mai_Engine_Installer {
 	 * during installation of this plugin.
 	 */
 	function admin_notices() {
-		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine migration.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
+		if ( class_exists( 'Mai_Theme_Engine' ) ) {
+			return;
+		}
+		$notice = sprintf( '<strong>' . __( 'Please %s to complete the Mai Theme Engine installation.', 'mai-pro-engine' ) . '</strong>', '<a href="' . get_permalink() . '">click here</a>' );
 		printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>', $notice );
 		// Remove "Plugin activated" notice.
 		if ( isset( $_GET['activate'] ) ) {
