@@ -5,7 +5,7 @@
  * Plugin URI:      https://maitheme.com/
  * Description:     This plugin only exists when older versions of Mai Theme or Mai Pro point to the older engine repository. Once Mai Theme Engine is installed and activated, this plugin can safely be deactivated and deleted.
  *
- * Version:         1.9.0-beta.2
+ * Version:         1.9.0-beta.3
  *
  * Author:          MaiTheme.com
  * Author URI:      https://maitheme.com
@@ -60,7 +60,6 @@ final class Mai_Engine_Installer {
 			// Methods
 			self::$instance->setup_constants();
 			self::$instance->includes();
-			self::$instance->write();
 			self::$instance->hooks();
 		}
 		return self::$instance;
@@ -74,7 +73,7 @@ final class Mai_Engine_Installer {
 	 */
 	private function setup_constants() {
 		// A full version ahead of Mai Theme Engine so it always shows as an update.
-		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '1.9.0-beta.2' );
+		define( 'MAI_THEME_ENGINE_INSTALLER_VERSION', '1.9.0-beta.3' );
 	}
 
 	/**
@@ -92,6 +91,17 @@ final class Mai_Engine_Installer {
 		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maiprowp/mai-pro-engine/', __FILE__, 'mai-pro-engine' );
 		WP_Dependency_Installer::instance()->register( array( $this->config ) );
 		$this->engine_running = true;
+	}
+
+	/**
+	 * Run the hooks and function.
+	 *
+	 * @return void
+	 */
+	public function hooks() {
+		add_action( 'plugins_loaded', array( $this, 'write' ) );
+		// add_action( 'admin_init',    array( $this, 'deactivate' ) );
+		add_action( 'admin_notices',  array( $this, 'admin_notices' ) );
 	}
 
 	/**
